@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/node_modules
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+    volumes:
+      - ./apps/api:/app/apps/api
+      - /app/node_modules
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  node_modules:
