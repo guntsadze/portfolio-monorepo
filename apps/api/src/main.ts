@@ -34,8 +34,8 @@ async function bootstrap() {
 
   // Swagger Documentation
   const config = new DocumentBuilder()
-    .setTitle("Portfolio API")
-    .setDescription("Professional Portfolio Backend API")
+    .setTitle("arvi API")
+    .setDescription("Professional arvi Backend API")
     .setVersion("1.0")
     .addBearerAuth()
     .build();

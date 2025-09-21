@@ -1,7 +1,7 @@
 {
-  "name": "portfolio-monorepo",
+  "name": "arvi-monorepo",
   "version": "1.0.0",
-  "description": "Professional Portfolio - Full Stack Application",
+  "description": "Professional arvi - Full Stack Application",
   "private": true,
   "workspaces": [
     "apps/*",
