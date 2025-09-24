@@ -1,5 +1,5 @@
 {
-  "name": "arvi-monorepo",
+  "name": "arvi",
   "version": "1.0.0",
   "description": "Professional arvi - Full Stack Application",
   "private": true,
@@ -8,7 +8,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --parallel --filter=web --filter=api",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:api": "turbo run dev --filter=api",
+    "dev:mobile": "turbo run dev --parallel --filter=mobile --filter=api -- --tunnel",
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
