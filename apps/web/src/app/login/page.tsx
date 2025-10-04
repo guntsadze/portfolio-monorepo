@@ -36,11 +36,16 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(data); // useAuth hook
-    } catch (err: any) {
-      console.error("Login failed:", err.message);
+      await login(data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Login failed:", err.message);
+      } else {
+        console.error("Login failed:", err);
+      }
     }
   };
+
 
   return (
     <div

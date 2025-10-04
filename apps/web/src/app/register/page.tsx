@@ -47,10 +47,15 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await registerUser(data);
-    } catch (err: any) {
-      console.error("Registration failed:", err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Registration failed:", err.message);
+      } else {
+        console.error("Registration failed:", err);
+      }
     }
   };
+
 
   return (
     <div

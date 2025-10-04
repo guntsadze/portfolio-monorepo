@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Trash2, Edit2, Plus, GripVertical, Search, Save, X, ChevronDown, ChevronRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -323,30 +323,29 @@ export default function MenuManager() {
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  // Fetch menus
-  useEffect(() => {
-    fetchMenus();
-  }, []);
+const fetchMenus = useCallback(async () => {
+  try {
+    setLoading(true);
+    const response = await axios.get(`${API_BASE_URL}/api/v1/menu`);
+    setMenus(response.data);
+    const initialExpanded: { [key: string]: boolean } = {};
+    response.data.forEach((item: MenuItem) => {
+      initialExpanded[item._id] = true;
+    });
+    setExpandedState(initialExpanded);
+    toast.success("Menus loaded successfully");
+  } catch (error) {
+    toast.error("Failed to fetch menus");
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+}, [API_BASE_URL]);
 
-  const fetchMenus = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${API_BASE_URL}/api/v1/menu`);
-      setMenus(response.data);
-      // ახალი: ყველა node default expanded
-      const initialExpanded: { [key: string]: boolean } = {};
-      response.data.forEach((item: MenuItem) => {
-        initialExpanded[item._id] = true;
-      });
-      setExpandedState(initialExpanded);
-      toast.success("Menus loaded successfully");
-    } catch (error) {
-      toast.error("Failed to fetch menus");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+useEffect(() => {
+  fetchMenus();
+}, [fetchMenus]);
+
 
   const tree = buildTree(menus);
 
@@ -633,7 +632,7 @@ export default function MenuManager() {
 
         {tree.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-slate-400 text-lg">No menu items yet. Click "Add Root Menu" to get started!</p>
+            <p className="text-slate-400 text-lg">მენიუები არ არის!</p>
           </div>
         )}
       </div>

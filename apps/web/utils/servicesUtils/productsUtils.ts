@@ -1,6 +1,6 @@
-import { DynamicDataType } from "@/types/common.types";
+import { DynamicDataType } from "../../types/common.types";
 
-export const shouldUpdateItem = (item) => !item.isDone;
+export const shouldUpdateItem = (item: any) => !item.isDone;
 
 export const queryBuilder = (query: DynamicDataType | undefined) => {
   let queryString = "?";
