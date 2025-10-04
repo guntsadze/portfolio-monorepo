@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
 // Validation schema
 const loginSchema = z.object({

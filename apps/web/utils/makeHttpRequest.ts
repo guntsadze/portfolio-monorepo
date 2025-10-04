@@ -1,5 +1,5 @@
-import { baseUrl } from "@/lib/endpoints";
 import axios, { AxiosRequestConfig, Method } from "axios";
+import { baseUrl } from "../lib/endpoints";
 
 const makeHttpRequest = async <T>(
   method: Method,

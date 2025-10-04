@@ -1,11 +1,7 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ToggleTheme } from "@/components/toggle-theme";
-import { Toaster } from "react-hot-toast"; // ✅ დაამატე
-import AppSidebar from "@/components/ui/appSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,12 +22,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <AppSidebar />
-            <div className="flex-1">{children}</div>
-          </SidebarProvider>
+          <div className="flex flex-col min-h-screen w-full">
+            {children}
+          </div>
 
-          {/* ✅ Toaster აუცილებლად უნდა იყოს */}
+
+          {/* Toaster */}
           <Toaster
             position="top-right"
             toastOptions={{

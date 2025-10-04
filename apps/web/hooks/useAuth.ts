@@ -2,11 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import Cookie from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { useCallback } from "react";
-import makeHttpRequest from "@/utils/makeHttpRequest";
 import toast from "react-hot-toast";
 import axios from "axios";
+import makeHttpRequest from "../utils/makeHttpRequest";
 
 type AuthResponse = {
   accessToken: string;
@@ -52,7 +51,7 @@ function useAuth() {
       try {
         const res = await makeHttpRequest<AuthResponse>(
           "POST",
-          "/auth/login",
+          "/auth/login",  
           data
         );
 
@@ -62,7 +61,7 @@ function useAuth() {
 
         const token = Cookie.get("accessToken"); // js cookie
         const respMenu = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/menu/getUserMenu`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/menu`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -72,7 +71,7 @@ function useAuth() {
 
         console.log("respMenu", respMenu.data);
 
-        // router.push("/dashboard");
+        router.push("/");
         return res;
       } catch (error: any) {
         const message =

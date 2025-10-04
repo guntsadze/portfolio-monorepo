@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, IsBoolean, IsArray } from "class-validator";
+import { Types } from "mongoose";
 
 export class CreateMenuDto {
   @ApiProperty({ example: "Dashboard", description: "Menu title" })
@@ -19,15 +20,9 @@ export class CreateMenuDto {
   @IsString()
   icon?: string;
 
-  @ApiProperty({
-    example: ["childMenuId1", "childMenuId2"],
-    description: "Child menu IDs",
-    required: false,
-  })
+  @ApiProperty({ example: null, description: "Parent menu ID", required: false })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  children?: string[];
+  parentId?: Types.ObjectId | null;
 
   @ApiProperty({
     example: true,

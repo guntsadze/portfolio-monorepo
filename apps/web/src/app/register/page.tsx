@@ -13,9 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 
-// Validation schema
 const registerSchema = z.object({
   firstName: z.string().min(2, "Min 2 chars").max(50, "Max 50 chars"),
   lastName: z.string().min(2, "Min 2 chars").max(50, "Max 50 chars"),
