@@ -40,7 +40,7 @@ export default function MenuHierarchy() {
     fetchMenus();
   }, []);
 
-  const handleClick = (menu: MenuItem) => {
+  const handleClick = (menu: MenuItem) => {  
     // Smooth animation trigger
     setBreadcrumbs((prev) => [...prev, menu]);
     const children = menus.filter((m) => m.parentId === menu._id);
@@ -136,7 +136,7 @@ export default function MenuHierarchy() {
           ) : (
             // ახალი: Empty state
             <div className="col-span-full text-center py-20">
-              <p className="text-slate-400 text-lg">No menu items at this level. Go back or add new ones!</p>
+              <p className="text-slate-400 text-lg">კატეგორიები აღარ არის!</p>
               <Button 
                 onClick={handleReset} 
                 className="mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
