@@ -1,70 +1,52 @@
-// vercel-adapter.js
-const { NestFactory } = require('@nestjs/core');
-const { AppModule } = require('./dist/app.module');
-const { ValidationPipe } = require('@nestjs/common');
-const helmet = require('helmet');
-const compression = require('compression');
+import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import helmet from "helmet";
+const compression = require("compression");
+import { AppModule } from "./app.module";
 
-let cachedApp = null;
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
 
-async function getApp() {
-  if (!cachedApp) {
-    const app = await NestFactory.create(AppModule);
+  // Security & Performance
+  app.use(helmet());
+  app.use(compression());
 
-    // Security & Performance
-    app.use(helmet({
-      contentSecurityPolicy: false, // Vercel-ისთვის
-    }));
-    app.use(compression());
+  // CORS Configuration
+  app.enableCors({
+    origin: ["http://localhost:3000", "https://arvi-web.vercel.app/"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  });
 
-    // CORS Configuration
-    app.enableCors({
-      origin: [
-        "http://localhost:3000",
-        "https://arvi-web.vercel.app"  // slash-ის გარეშე!
-      ],
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    });
+  // Global Validation Pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
-    // Global Validation Pipe
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
+  // API Prefix
+  app.setGlobalPrefix("api/v1");
 
-    // API Prefix
-    app.setGlobalPrefix("api/v1");
+  // Swagger Documentation
+  const config = new DocumentBuilder()
+    .setTitle("arvi API")
+    .setDescription("Professional arvi Backend API")
+    .setVersion("1.0")
+    .addBearerAuth()
+    .build();
 
-    // Swagger - მხოლოდ development-ში
-    if (process.env.NODE_ENV !== 'production') {
-      const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
-      const config = new DocumentBuilder()
-        .setTitle("arvi API")
-        .setDescription("Professional arvi Backend API")
-        .setVersion("1.0")
-        .addBearerAuth()
-        .build();
-      
-      const document = SwaggerModule.createDocument(app, config);
-      SwaggerModule.setup("api/docs", app, document);
-    }
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api/docs", app, document);
 
-    await app.init();
-    cachedApp = app;
-    
-    console.log('✅ NestJS app initialized for Vercel');
-  }
-  
-  return cachedApp;
+  const port = process.env.PORT || 4000;
+  await app.listen(port);
+
+  console.log(`🚀 Backend running on: http://localhost:${port}`);
+  console.log(`📚 API Docs: http://localhost:${port}/api/docs`);
 }
-
-module.exports = async (req, res) => {
-  const app = await getApp();
-  const instance = app.getHttpAdapter().getInstance();
-  return instance(req, res);
-};
+bootstrap();

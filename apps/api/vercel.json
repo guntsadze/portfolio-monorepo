@@ -1,23 +1,9 @@
 {
   "version": 2,
   "builds": [
-    { 
-      "src": "vercel-adapter.js", 
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "includeFiles": ["dist/**"]
-      }
-    }
+    { "src": "main.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { 
-      "src": "/(.*)", 
-      "dest": "vercel-adapter.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+    { "src": "/(.*)", "dest": "main.js" }
+  ]
 }
