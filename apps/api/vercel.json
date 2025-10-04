@@ -1,9 +1,22 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "main.js", "use": "@vercel/node" }
+  "version": 3,  
+  "builds": [], 
+  "routes": [  
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1" 
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"  
+    }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "main.js" }
-  ]
+  "env": { 
+    "NEXT_PUBLIC_API_BASE_URL": "@api_base_url"
+  },
+  "functions": { 
+    "api/**/*.js": {
+      "maxDuration": 10
+    }
+  }
 }
